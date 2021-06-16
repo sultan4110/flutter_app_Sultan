@@ -1,12 +1,35 @@
 import 'package:flutter/material.dart';
 
-Widget appBarMain(BuildContext context){
+Widget appBarMain(BuildContext context) {
+  return AppBar(title: Container()
+      //Image.asset("assets/imagess/logo.png", height: 50) //logo image...
 
-  return AppBar(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
-    title:Image.asset("assets/imagess/logo.png", height: 50)
+      );
+}
+//modularization in programing
 
+InputDecoration textFieldInputDecoration(String hintText) {
+  return InputDecoration(
+      hintText: hintText,
+      hintStyle: TextStyle(
+        color: Colors.white54,
+      ),
+      focusedBorder:
+          UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+      enabledBorder:
+          UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)));
+}
 
+TextStyle simpleTextStyle() {
+  return TextStyle(
+    color: Colors.white,
+    fontSize: 16,
+  );
+}
+
+TextStyle mediumTextStyle() {
+  return TextStyle(
+    color: Colors.white,
+    fontSize: 17,
   );
 }
