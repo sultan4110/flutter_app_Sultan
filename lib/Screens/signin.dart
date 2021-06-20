@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Screens/signup.dart';
 import 'package:flutter_app/widget/widget.dart';
 
 class SignIn extends StatefulWidget {
@@ -113,7 +114,7 @@ class _SignInState extends State<SignIn> {
                       borderRadius: BorderRadius.circular(30)),
 
                   child: Text(
-                    "FaceBook",
+                    "Facebook",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,
@@ -131,12 +132,18 @@ class _SignInState extends State<SignIn> {
                       "Don't have account? ",
                       style: mediumTextStyle(),
                     ),
-                    Text(
-                      "Register now ",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        decoration: TextDecoration.underline,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SignUp()));
+                      },
+                      child: Text(
+                        "Register now ",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          decoration: TextDecoration.underline,
+                        ),
                       ),
                     )
                   ],

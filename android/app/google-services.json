@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "276254620843",
+    "project_id": "agile-mobile-development",
+    "storage_bucket": "agile-mobile-development.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276254620843:android:cace84fbc4cf8e2d7f8bee",
+        "android_client_info": {
+          "package_name": "com.example.flutter_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "276254620843-s23175i5u1bni78528mm9mlus0cehc49.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1DL3MslsA3cqEgm0qkNmL7-K8FSMk-Tg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "276254620843-s23175i5u1bni78528mm9mlus0cehc49.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

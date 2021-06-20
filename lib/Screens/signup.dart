@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Screens/signin.dart';
 import 'package:flutter_app/widget/widget.dart';
 
 class SignUp extends StatefulWidget {
@@ -14,8 +15,7 @@ class _SignUpState extends State<SignUp> {
       new TextEditingController();
   TextEditingController passwordTextEditingController =
       new TextEditingController();
-  TextEditingController
-      confirmPasswordTextEditingControllerTextEditingController =
+  TextEditingController confirmPasswordTextEditingController =
       new TextEditingController();
 
   @override
@@ -59,8 +59,7 @@ class _SignUpState extends State<SignUp> {
                     style: simpleTextStyle(),
                   ),
                   TextField(
-                    controller:
-                        confirmPasswordTextEditingControllerTextEditingController,
+                    controller: confirmPasswordTextEditingController,
                     decoration: textFieldInputDecoration("Confirm password"),
                     style: simpleTextStyle(),
                   ),
@@ -84,7 +83,7 @@ class _SignUpState extends State<SignUp> {
                         borderRadius: BorderRadius.circular(30)),
 
                     child: Text(
-                      "Sign In",
+                      "Sign up",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 17,
@@ -96,20 +95,26 @@ class _SignUpState extends State<SignUp> {
                     height: 14,
                   ),
 
-                  Container(
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    // Fix size latter...
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30)),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => SignIn()));
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      // Fix size latter...
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30)),
 
-                    child: Text(
-                      "Back",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 17,
+                      child: Text(
+                        "Back",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17,
+                        ),
                       ),
                     ),
                   ),

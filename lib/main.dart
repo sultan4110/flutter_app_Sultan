@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/signin.dart';
 
-import 'Screens/first.dart';
+import 'Screens/home.dart';
 import 'Screens/signup.dart';
 
 void main() => runApp(MyApp());
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget implements PreferredSizeWidget {
         primaryColor: Color(0xff145C9E),
       ),
       debugShowCheckedModeBanner: false,
-      home: First(),
+      home: SignIn(),
     );
   }
 }

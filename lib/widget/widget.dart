@@ -6,6 +6,7 @@ Widget appBarMain(BuildContext context) {
 
       );
 }
+
 //modularization in programing
 
 InputDecoration textFieldInputDecoration(String hintText) {
