@@ -28,16 +28,8 @@ class _SignInState extends State<SignIn> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                      hintText: "email",
-                      hintStyle: TextStyle(
-                        color: Colors.white54,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white)),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white))),
+                  decoration: textFieldInputDecoration("email"),
+                  style: simpleTextStyle(),
                 ),
                 TextField(
                   decoration: textFieldInputDecoration("password"),

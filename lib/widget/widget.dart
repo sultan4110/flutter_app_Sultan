@@ -33,4 +33,25 @@ TextStyle mediumTextStyle() {
     color: Colors.white,
     fontSize: 17,
   );
+
+  Container customButton(BuildContext context, buttonText, Color buttonColor) {
+    alignment:
+    Alignment.center;
+    width:
+    MediaQuery.of(context).size.width;
+    padding:
+    EdgeInsets.symmetric(vertical: 15);
+    // Fix size latter...
+    decoration:
+    BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(30));
+
+    child:
+    Text(
+      buttonText,
+      style: TextStyle(
+        color: buttonColor,
+        fontSize: 17,
+      ),
+    );
+  }
 }

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/signin.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'Screens/home.dart';
 import 'Screens/signup.dart';
 
-void main() => runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget implements PreferredSizeWidget {
   // This widget is the root of your application.
