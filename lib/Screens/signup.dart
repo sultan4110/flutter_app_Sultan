@@ -25,9 +25,11 @@ class _SignUpState extends State<SignUp> {
       new TextEditingController();
 
   signMeUp() {
-    if (formKey.currentState!.validate()) {}
-    authMethods.signUpwithEmailAndPasword(
-        emailTextEditingController.text, passwordTextEditingController.text);
+    if (formKey.currentState!.validate()) {
+      authMethods.signUpwithEmailAndPasword(
+          emailTextEditingController.text, passwordTextEditingController.text);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    }
   }
 
   @override
@@ -72,7 +74,11 @@ class _SignUpState extends State<SignUp> {
                           style: simpleTextStyle(),
                         ),
                         TextFormField(
-                          //validator:(val)=>RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$').hasMatch(val!)? null: "Please provide a valid email",
+                          validator: (val) =>
+                              RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                      .hasMatch(val!)
+                                  ? null
+                                  : "Please provide a valid email",
                           controller: emailTextEditingController,
                           decoration: textFieldInputDecoration("Email"),
                           style: simpleTextStyle(),
@@ -83,12 +89,18 @@ class _SignUpState extends State<SignUp> {
                                   .hasMatch(val!)
                               ? null
                               : "Please provide a valid password ex:@Least8Letters",
+                          obscureText: true,
                           controller: passwordTextEditingController,
                           decoration: textFieldInputDecoration("Password"),
                           style: simpleTextStyle(),
                         ),
                         TextFormField(
                           controller: confirmPasswordTextEditingController,
+                          validator: (val) => val!.isEmpty ||
+                                  val != passwordTextEditingController.text
+                              ? "password does not match"
+                              : null,
+                          obscureText: true,
                           decoration:
                               textFieldInputDecoration("Confirm password"),
                           style: simpleTextStyle(),
@@ -105,8 +117,6 @@ class _SignUpState extends State<SignUp> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      //  Navigator.push(context,
-                      //    MaterialPageRoute(builder: (context) => Home()));
                       signMeUp();
                     },
                     child: Container(

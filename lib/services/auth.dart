@@ -1,8 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:crypt/crypt.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  FlutterSecureStorage storage =
+      new FlutterSecureStorage(); // initialize FlutterSecureStorage in order to get access to the device's secure storage
 
   Future signInWithEmailAndPassword(String email, String password) async {
     try {

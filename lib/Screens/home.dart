@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
               ),
 
               SizedBox(
-                height: 250,
+                height: 350,
               ), // can do it in another way
 
               GestureDetector(
