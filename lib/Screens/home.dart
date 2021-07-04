@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/signin.dart';
+import 'package:flutter_app/services/auth.dart';
 import 'package:flutter_app/widget/widget.dart';
 
 class Home extends StatefulWidget {
@@ -10,6 +11,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  AuthMethods authMethods = new AuthMethods();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +29,7 @@ class _HomeState extends State<Home> {
               ), // can do it in another way
 
               Icon(
-                Icons.build_circle_outlined,
+                Icons.home,
                 color: Colors.white70,
                 size: 120,
               ),
@@ -35,7 +38,7 @@ class _HomeState extends State<Home> {
               ), // can do it in another way
 
               Text(
-                "Under Construction",
+                "Welcome Home",
                 style: TextStyle(color: Colors.white70, fontSize: 25),
               ),
 
@@ -45,7 +48,9 @@ class _HomeState extends State<Home> {
 
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
+                  authMethods.signOut();
+
+                  Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) => SignIn()));
                 },
                 child: Container(

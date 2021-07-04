@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/signup.dart';
+import 'package:flutter_app/services/auth.dart';
+import 'package:flutter_app/services/database.dart';
 import 'package:flutter_app/widget/widget.dart';
+import 'home.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -11,6 +15,32 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  User? user = FirebaseAuth.instance.currentUser;
+  AuthMethods authMethods = new AuthMethods();
+  DatabaseMethods databaseMethods = new DatabaseMethods();
+  final formKey = GlobalKey<FormState>();
+  TextEditingController emailTextEditingController =
+      new TextEditingController();
+  TextEditingController passwordTextEditingController =
+      new TextEditingController();
+
+  signIn() async {
+    if (formKey.currentState!.validate()) {
+      await authMethods
+          .signInWithEmailAndPassword(emailTextEditingController.text,
+              passwordTextEditingController.text)
+          .then((result) async {
+        if (result != null) {
+          user!.sendEmailVerification();
+          await user!.sendEmailVerification();
+
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Home()));
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,13 +57,32 @@ class _SignInState extends State<SignIn> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
-                  decoration: textFieldInputDecoration("email"),
-                  style: simpleTextStyle(),
-                ),
-                TextField(
-                  decoration: textFieldInputDecoration("password"),
-                  style: simpleTextStyle(),
+                Form(
+                  key: formKey,
+                  child: Column(children: [
+                    TextFormField(
+                      validator: (val) =>
+                          RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                  .hasMatch(val!)
+                              ? null
+                              : "Please provide a valid email",
+                      controller: emailTextEditingController,
+                      decoration: textFieldInputDecoration("email"),
+                      style: simpleTextStyle(),
+                    ),
+                    TextFormField(
+                      validator: (val) => val!.length > 6 &&
+                              val.contains(RegExp(r'[A-Z]')) &&
+                              val.contains(RegExp(r'[a-z]')) &&
+                              val.contains(RegExp(r'[0-9]')) &&
+                              val.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))
+                          ? null
+                          : "Please provide a valid password ex:@Least8Letters",
+                      controller: passwordTextEditingController,
+                      decoration: textFieldInputDecoration("password"),
+                      style: simpleTextStyle(),
+                    ),
+                  ]),
                 ),
                 SizedBox(
                   height: 8,
@@ -51,23 +100,28 @@ class _SignInState extends State<SignIn> {
                 SizedBox(
                   height: 8,
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  // Fix size latter...
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                        const Color(0xff007EF4),
-                        const Color(0xff2A75BC)
-                      ]),
-                      borderRadius: BorderRadius.circular(30)),
+                GestureDetector(
+                  onTap: () {
+                    signIn();
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    // Fix size latter...
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                          const Color(0xff007EF4),
+                          const Color(0xff2A75BC)
+                        ]),
+                        borderRadius: BorderRadius.circular(30)),
 
-                  child: Text(
-                    "Sign In",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
+                    child: Text(
+                      "Sign In",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                      ),
                     ),
                   ),
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/signin.dart';
 import 'package:flutter_app/services/auth.dart';
+import 'package:flutter_app/services/database.dart';
 import 'package:flutter_app/widget/widget.dart';
 
 import 'home.dart';
@@ -14,7 +15,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   AuthMethods authMethods = new AuthMethods();
-
+  DatabaseMethods databaseMethods = new DatabaseMethods();
   final formKey = GlobalKey<FormState>();
   TextEditingController nameTextEditingController = new TextEditingController();
   TextEditingController emailTextEditingController =
@@ -26,9 +27,26 @@ class _SignUpState extends State<SignUp> {
 
   signMeUp() {
     if (formKey.currentState!.validate()) {
-      authMethods.signUpwithEmailAndPasword(
-          emailTextEditingController.text, passwordTextEditingController.text);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+      authMethods
+          .signUpwithEmailAndPasword(emailTextEditingController.text,
+              passwordTextEditingController.text)
+          .then((val) async {
+        if (val != null) {
+          Map<String, String> userDataMap = {
+            "userName": nameTextEditingController.text,
+            "userEmail": emailTextEditingController.text,
+            "userPassword":
+                authMethods.encryptPassword(passwordTextEditingController.text)
+          };
+          databaseMethods.uploadUserInfo(userDataMap);
+
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SignIn()));
+        }
+
+        return null;
+      }); //must comes after uploadUserInfo
+
     }
   }
 
@@ -84,9 +102,12 @@ class _SignUpState extends State<SignUp> {
                           style: simpleTextStyle(),
                         ),
                         TextFormField(
-                          validator: (val) => RegExp(
-                                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
-                                  .hasMatch(val!)
+                          validator: (val) => val!.length > 6 &&
+                                  val.contains(RegExp(r'[A-Z]')) &&
+                                  val.contains(RegExp(r'[a-z]')) &&
+                                  val.contains(RegExp(r'[0-9]')) &&
+                                  val.contains(
+                                      RegExp(r'[!@#$%^&*(),.?":{}|<>]'))
                               ? null
                               : "Please provide a valid password ex:@Least8Letters",
                           obscureText: true,
