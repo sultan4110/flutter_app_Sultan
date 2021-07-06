@@ -1,17 +1,14 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:crypt/crypt.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  late User user;
 
-  late Timer timer;
-  FlutterSecureStorage storage =
-      new FlutterSecureStorage(); // initialize FlutterSecureStorage in order to get access to the device's secure storage
+  FlutterSecureStorage storage = new FlutterSecureStorage(); // initialize FlutterSecureStorage in order to get access to the device's secure storage
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
@@ -25,17 +22,28 @@ class AuthMethods {
   }
 
   Future signUpwithEmailAndPasword(String email, String password) async {
+    UserCredential userCredential = await _auth
+        .createUserWithEmailAndPassword(email: email, password: password);
+    User user = userCredential.user!;
+
     try {
-      UserCredential userCredential = await _auth
-          .createUserWithEmailAndPassword(email: email, password: password);
-      User user = userCredential.user!;
+      await user.sendEmailVerification();
       return user.uid;
     } catch (e) {
-      print(e.toString());
+
+
+
     }
   }
 
-  Future restPass(String email) async {
+
+
+
+
+
+
+
+  Future resetPassword(String email) async {
     try {
       return await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {

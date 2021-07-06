@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Screens/rest_password.dart';
 import 'package:flutter_app/Screens/signup.dart';
 import 'package:flutter_app/services/auth.dart';
 import 'package:flutter_app/services/database.dart';
@@ -59,25 +60,17 @@ class _SignInState extends State<SignIn> {
               children: [
                 Form(
                   key: formKey,
+                  autovalidateMode:AutovalidateMode.onUserInteraction ,
+
                   child: Column(children: [
                     TextFormField(
-                      validator: (val) =>
-                          RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                  .hasMatch(val!)
-                              ? null
-                              : "Please provide a valid email",
+                      //validator: (val) => RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$').hasMatch(val!) ? null : "Please provide a valid email",
                       controller: emailTextEditingController,
                       decoration: textFieldInputDecoration("email"),
                       style: simpleTextStyle(),
                     ),
                     TextFormField(
-                      validator: (val) => val!.length > 6 &&
-                              val.contains(RegExp(r'[A-Z]')) &&
-                              val.contains(RegExp(r'[a-z]')) &&
-                              val.contains(RegExp(r'[0-9]')) &&
-                              val.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))
-                          ? null
-                          : "Please provide a valid password ex:@Least8Letters",
+                   //   validator: (val) => val!.length > 6 && val.contains(RegExp(r'[A-Z]')) && val.contains(RegExp(r'[a-z]')) && val.contains(RegExp(r'[0-9]')) && val.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')) ? null : "Please provide a valid password ex:@Least8Letters",
                       controller: passwordTextEditingController,
                       decoration: textFieldInputDecoration("password"),
                       style: simpleTextStyle(),
@@ -87,16 +80,24 @@ class _SignInState extends State<SignIn> {
                 SizedBox(
                   height: 8,
                 ), // can do it in another way
-                Container(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Text(
-                        "ForgotPassword?",
-                        style: simpleTextStyle(),
-                      ),
-                    )),
+                GestureDetector(
+                  onTap:(){
+
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => RestPassword()));
+                },
+
+                  child: Container(
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: Text(
+                          "ForgotPassword?",
+                          style: simpleTextStyle(),
+                        ),
+                      )),
+                ),
                 SizedBox(
                   height: 8,
                 ),
@@ -195,7 +196,7 @@ class _SignInState extends State<SignIn> {
                   ],
                 ),
                 SizedBox(
-                  height: 45,
+                  height: 70,
                 ),
               ],
             ),

@@ -2,18 +2,18 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Screens/signin.dart';
 
-class PageControl extends StatefulWidget {
-  const PageControl({Key? key}) : super(key: key);
+class RootPageController extends StatefulWidget {
+  const RootPageController({Key? key}) : super(key: key);
 
   @override
-  _PageControlState createState() => _PageControlState();
+  _RootPageControllerState createState() => _RootPageControllerState();
 }
 
-class _PageControlState extends State<PageControl> {
+class _RootPageControllerState extends State<RootPageController> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late User user;
-
   late Timer timer;
 
   @override
@@ -21,7 +21,8 @@ class _PageControlState extends State<PageControl> {
     user = _auth.currentUser!;
     user.sendEmailVerification();
     timer = Timer.periodic(Duration(seconds: 5), (timer) {
-      checkEmailVerified();
+
+       checkEmailVerified();
     });
 
     super.initState();
@@ -37,6 +38,8 @@ class _PageControlState extends State<PageControl> {
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
+
       print("verified");
     }
   }

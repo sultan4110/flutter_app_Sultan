@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/signin.dart';
+import 'package:flutter_app/helper/rootpage_comtroller.dart';
 import 'package:flutter_app/services/auth.dart';
 import 'package:flutter_app/services/database.dart';
 import 'package:flutter_app/widget/widget.dart';
@@ -29,8 +30,7 @@ class _SignUpState extends State<SignUp> {
     if (formKey.currentState!.validate()) {
       authMethods
           .signUpwithEmailAndPasword(emailTextEditingController.text,
-              passwordTextEditingController.text)
-          .then((val) async {
+              passwordTextEditingController.text).then((val) async {
         if (val != null) {
           Map<String, String> userDataMap = {
             "userName": nameTextEditingController.text,
@@ -41,7 +41,7 @@ class _SignUpState extends State<SignUp> {
           databaseMethods.uploadUserInfo(userDataMap);
 
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SignIn()));
+              context, MaterialPageRoute(builder: (context) => Home()));
         }
 
         return null;
@@ -77,39 +77,23 @@ class _SignUpState extends State<SignUp> {
                   ),
                   Form(
                     key: formKey,
+                    autovalidateMode:AutovalidateMode.onUserInteraction ,
                     child: Column(
                       children: [
                         TextFormField(
-                          validator: (val) {
-                            if (val!.isEmpty || val.length < 4) {
-                              return "Required: must be longer than 3 letters ";
-                            } else {
-                              return null;
-                            }
-                          },
+                          validator: (val) => val!.isEmpty || val.length < 4 ? "Required: must be longer than 3 letters " : null,
                           controller: nameTextEditingController,
                           decoration: textFieldInputDecoration("User Name"),
                           style: simpleTextStyle(),
                         ),
                         TextFormField(
-                          validator: (val) =>
-                              RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                      .hasMatch(val!)
-                                  ? null
-                                  : "Please provide a valid email",
+                          // validator: (val) => RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$').hasMatch(val!) ? null : "Please provide a valid email",
                           controller: emailTextEditingController,
                           decoration: textFieldInputDecoration("Email"),
                           style: simpleTextStyle(),
                         ),
                         TextFormField(
-                          validator: (val) => val!.length > 6 &&
-                                  val.contains(RegExp(r'[A-Z]')) &&
-                                  val.contains(RegExp(r'[a-z]')) &&
-                                  val.contains(RegExp(r'[0-9]')) &&
-                                  val.contains(
-                                      RegExp(r'[!@#$%^&*(),.?":{}|<>]'))
-                              ? null
-                              : "Please provide a valid password ex:@Least8Letters",
+                        //  validator: (val) => val!.length > 6 && val.contains(RegExp(r'[A-Z]')) && val.contains(RegExp(r'[a-z]')) && val.contains(RegExp(r'[0-9]')) && val.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))? null : "Please provide a valid password ex:@Least8Letters",
                           obscureText: true,
                           controller: passwordTextEditingController,
                           decoration: textFieldInputDecoration("Password"),
@@ -117,10 +101,7 @@ class _SignUpState extends State<SignUp> {
                         ),
                         TextFormField(
                           controller: confirmPasswordTextEditingController,
-                          validator: (val) => val!.isEmpty ||
-                                  val != passwordTextEditingController.text
-                              ? "password does not match"
-                              : null,
+                         // validator: (val) => val!.isEmpty || val != passwordTextEditingController.text ? "password does not match" : null,
                           obscureText: true,
                           decoration:
                               textFieldInputDecoration("Confirm password"),

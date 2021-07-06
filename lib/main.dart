@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget implements PreferredSizeWidget {
         scaffoldBackgroundColor: Color(0xff1F1F1F),
         primaryColor: Color(0xff145C9E),
       ),
-      debugShowCheckedModeBanner: false,
       home: SignIn(),
     );
   }
