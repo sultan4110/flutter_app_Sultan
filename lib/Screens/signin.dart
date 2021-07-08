@@ -6,6 +6,7 @@ import 'package:flutter_app/Screens/signup.dart';
 import 'package:flutter_app/services/auth.dart';
 import 'package:flutter_app/services/database.dart';
 import 'package:flutter_app/widget/widget.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'home.dart';
 
 class SignIn extends StatefulWidget {
@@ -27,13 +28,9 @@ class _SignInState extends State<SignIn> {
 
   signIn() async {
     if (formKey.currentState!.validate()) {
-      await authMethods
-          .signInWithEmailAndPassword(emailTextEditingController.text,
-              passwordTextEditingController.text)
+      await authMethods.signInWithEmailAndPassword(emailTextEditingController.text, passwordTextEditingController.text)
           .then((result) async {
         if (result != null) {
-          user!.sendEmailVerification();
-          await user!.sendEmailVerification();
 
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => Home()));
@@ -41,6 +38,37 @@ class _SignInState extends State<SignIn> {
       });
     }
   }
+
+
+
+  facebookSignIn() async {
+    if (formKey.currentState!.validate()) {
+
+      await authMethods.signInWithFacebook().then((result) async {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Home()));
+      });
+    }
+  }
+
+
+  googleSignIn() async {
+    if (formKey.currentState!.validate()) {
+
+      await authMethods.signInWithGoogle().then((result) async {
+        if (result != null) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Home()));
+        }
+      });
+    }
+  }
+
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -131,40 +159,58 @@ class _SignInState extends State<SignIn> {
                   height: 14,
                 ),
 
-                Container(
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  // Fix size latter...
-                  decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(30)),
+                GestureDetector(
 
-                  child: Text(
-                    "Google",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
+                  onTap:(){
+
+                    googleSignIn();
+
+                  },
+
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    // Fix size latter...
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(30)),
+
+                    child: Text(
+                      "Google",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                      ),
                     ),
                   ),
                 ),
                 SizedBox(
                   height: 14,
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  // Fix size latter...
-                  decoration: BoxDecoration(
-                      color: Colors.indigo,
-                      borderRadius: BorderRadius.circular(30)),
+                GestureDetector(
+                  onTap: (){
 
-                  child: Text(
-                    "Facebook",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
+                    facebookSignIn();
+
+
+
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    // Fix size latter...
+                    decoration: BoxDecoration(
+                        color: Colors.indigo,
+                        borderRadius: BorderRadius.circular(30)),
+
+                    child: Text(
+                      "Facebook",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                      ),
                     ),
                   ),
                 ),
@@ -181,8 +227,7 @@ class _SignInState extends State<SignIn> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => SignUp()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
                       },
                       child: Text(
                         "Register now ",

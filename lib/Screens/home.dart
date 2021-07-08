@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
               ),
 
               SizedBox(
-                height: 350,
+                height: 200,
               ), // can do it in another way
 
               GestureDetector(
@@ -63,7 +63,7 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(30)),
 
                   child: Text(
-                    "Back",
+                    "Log Out",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 17,
