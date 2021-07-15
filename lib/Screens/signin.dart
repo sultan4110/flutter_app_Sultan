@@ -30,11 +30,17 @@ class _SignInState extends State<SignIn> {
     if (formKey.currentState!.validate()) {
       await authMethods.signInWithEmailAndPassword(emailTextEditingController.text, passwordTextEditingController.text)
           .then((result) async {
-        if (result != null) {
-
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Home()));
+        if (result != null && user!.emailVerified) {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
         }
+        else authMethods.signOut();
+      /*  else   Todo:email verification handler/UI
+          {
+            Fluttertoast.showToast(msg: "test",
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 3,
+            );authMethods.signOut();
+          }*/
       });
     }
   }
@@ -111,8 +117,7 @@ class _SignInState extends State<SignIn> {
                 GestureDetector(
                   onTap:(){
 
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => RestPassword()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => RestPassword()));
                 },
 
                   child: Container(

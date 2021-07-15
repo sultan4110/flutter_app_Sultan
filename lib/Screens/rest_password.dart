@@ -35,7 +35,7 @@ class _RestPasswordState extends State<RestPassword> {
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 40, right: 40, top: 8),
+                padding: const EdgeInsets.only(left: 50, right: 50, top: 8),
                 child: Text(
                   "We are going to send you a link to reset your password there.",
                   style: TextStyle(color: Colors.white70, fontSize: 18),

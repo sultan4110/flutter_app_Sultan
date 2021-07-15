@@ -11,3 +11,10 @@ class DatabaseMethods {
     FirebaseFirestore.instance.collection("users").add(userMap);
   }
 }
+
+
+
+
+
+
+

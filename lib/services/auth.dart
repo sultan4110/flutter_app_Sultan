@@ -8,47 +8,48 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'database.dart';
+
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  DatabaseMethods databaseMethods = new DatabaseMethods();
 
-  FlutterSecureStorage storage = new FlutterSecureStorage(); // initialize FlutterSecureStorage in order to get access to the device's secure storage
+  FlutterSecureStorage storage =
+      new FlutterSecureStorage(); // initialize FlutterSecureStorage in order to get access to the device's secure storage
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
+
       final User user = userCredential.user!;
-
-
-
-
-
-
+      await user.reload();
       return user.uid;
-
-
-
-    } on FirebaseAuthException catch  (e) {
-      Fluttertoast.showToast(msg: e.message.toString(), gravity: ToastGravity.CENTER, timeInSecForIosWeb:2,);
-
+    } on FirebaseAuthException catch (e) {
+      Fluttertoast.showToast(
+        msg: e.message.toString(),
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 3,
+      );
     }
   }
 
   Future signUpwithEmailAndPasword(String email, String password) async {
     try {
-    UserCredential userCredential = await _auth
-        .createUserWithEmailAndPassword(email: email, password: password);
-    User user = userCredential.user!;
-
+      UserCredential userCredential = await _auth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      User user = userCredential.user!;
       await user.sendEmailVerification();
       return user.uid;
-    } on FirebaseAuthException catch  (e) {
-      Fluttertoast.showToast(msg: e.message.toString(), gravity: ToastGravity.CENTER, timeInSecForIosWeb:2,);
-
+    } on FirebaseAuthException catch (e) {
+      Fluttertoast.showToast(
+        msg: e.message.toString(),
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 3,
+      );
     }
   }
-
 
   Future<UserCredential> signInWithFacebook() async {
     // Trigger the sign-in flow
@@ -56,12 +57,12 @@ class AuthMethods {
 
     // Create a credential from the access token
     final OAuthCredential facebookAuthCredential =
-    FacebookAuthProvider.credential(result.accessToken!.token);
+        FacebookAuthProvider.credential(result.accessToken!.token);
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+    return await FirebaseAuth.instance
+        .signInWithCredential(facebookAuthCredential);
   }
-
 
   Future<User?> signInWithGoogle() async {
     User? user;
@@ -69,11 +70,11 @@ class AuthMethods {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     final GoogleSignInAccount? googleSignInAccount =
-    await googleSignIn.signIn();
+        await googleSignIn.signIn();
 
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount.authentication;
+          await googleSignInAccount.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
@@ -81,40 +82,44 @@ class AuthMethods {
       );
 
       try {
-        final UserCredential userCredential = await _auth.signInWithCredential(credential);
+        final UserCredential userCredential =
+            await _auth.signInWithCredential(credential);
 
         user = userCredential.user;
-      } on FirebaseAuthException catch  (e) {
-        Fluttertoast.showToast(msg: e.message.toString(), gravity: ToastGravity.CENTER, timeInSecForIosWeb:2,);
+      } on FirebaseAuthException catch (e) {
+        Fluttertoast.showToast(
+          msg: e.message.toString(),
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+        );
       }
     }
 
     return user;
   }
 
-
-
-
-
-
-
-
-
   Future resetPassword(String email) async {
     try {
       return await _auth.sendPasswordResetEmail(email: email);
-    } on FirebaseAuthException catch  (e) {
-      Fluttertoast.showToast(msg: e.message.toString(), gravity: ToastGravity.CENTER, timeInSecForIosWeb:2,);
+    } on FirebaseAuthException catch (e) {
+      Fluttertoast.showToast(
+        msg: e.message.toString(),
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 3,
+      );
     }
   }
 
   Future signOut() async {
     try {
       await _googleSignIn.signOut();
-      await _auth.signOut()  ;
-    } on FirebaseAuthException catch  (e) {
-      Fluttertoast.showToast(msg: e.message.toString(), gravity: ToastGravity.CENTER, timeInSecForIosWeb:2,);
-
+      await _auth.signOut();
+    } on FirebaseAuthException catch (e) {
+      Fluttertoast.showToast(
+        msg: e.message.toString(),
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 3,
+      );
     }
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/signin.dart';
-import 'package:flutter_app/helper/rootpage_comtroller.dart';
 import 'package:flutter_app/services/auth.dart';
 import 'package:flutter_app/services/database.dart';
 import 'package:flutter_app/widget/widget.dart';
@@ -28,15 +27,14 @@ class _SignUpState extends State<SignUp> {
 
   signMeUp() {
     if (formKey.currentState!.validate()) {
-      authMethods
-          .signUpwithEmailAndPasword(emailTextEditingController.text,
-              passwordTextEditingController.text).then((val) async {
+      authMethods.signUpwithEmailAndPasword(emailTextEditingController.text,
+          passwordTextEditingController.text).then((val) async {
         if (val != null) {
           Map<String, String> userDataMap = {
             "userName": nameTextEditingController.text,
             "userEmail": emailTextEditingController.text,
             "userPassword":
-                authMethods.encryptPassword(passwordTextEditingController.text)
+            authMethods.encryptPassword(passwordTextEditingController.text)
           };
           databaseMethods.uploadUserInfo(userDataMap);
 
@@ -87,7 +85,7 @@ class _SignUpState extends State<SignUp> {
                           style: simpleTextStyle(),
                         ),
                         TextFormField(
-                          // validator: (val) => RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$').hasMatch(val!) ? null : "Please provide a valid email",
+                       //    validator: (val) => RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$').hasMatch(val!) ? null : "Please provide a valid email",
                           controller: emailTextEditingController,
                           decoration: textFieldInputDecoration("Email"),
                           style: simpleTextStyle(),

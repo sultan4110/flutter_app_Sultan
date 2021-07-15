@@ -1,25 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/Screens/browse.dart';
 import 'package:flutter_app/Screens/signin.dart';
 import 'package:flutter_app/Screens/upload.dart';
 import 'package:flutter_app/services/auth.dart';
+import 'package:flutter_app/services/firebase_storage_methods.dart';
 import 'package:flutter_app/widget/widget.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class Browse extends StatefulWidget {
+  const Browse({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  _BrowseState createState() => _BrowseState();
 }
 
-class _HomeState extends State<Home> {
+class _BrowseState extends State<Browse> {
+  late Future <List<FirebaseFile>> futureFiles;
+
+
+
   AuthMethods authMethods = new AuthMethods();
+
+@override
+  void initState() {
+
+ futureFiles = FirebaseStorageMethods.listAll('files/');
+
+
+
+  super.initState();
+  }
+
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(40),
+        appBar: PreferredSize(preferredSize: const Size.fromHeight(40),
           child: appBarMain(context),
         ),
         body: Container(
@@ -51,8 +70,6 @@ class _HomeState extends State<Home> {
 
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Upload()));
-
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -64,7 +81,7 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(30)),
 
                   child: Text(
-                    "Upload File",
+                    "Images",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 17,
@@ -77,7 +94,6 @@ class _HomeState extends State<Home> {
 
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Browse()));
 
                 },
                 child: Container(
@@ -90,7 +106,7 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(30)),
 
                   child: Text(
-                    " Browse",
+                    " Videos",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 17,
@@ -98,8 +114,8 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-          SizedBox(
-            height: 30,)
+              SizedBox(
+                height: 30,)
               ,
               GestureDetector(
                 onTap: () {
@@ -118,7 +134,7 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(30)),
 
                   child: Text(
-                    "Log Out",
+                    "Documents",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 17,

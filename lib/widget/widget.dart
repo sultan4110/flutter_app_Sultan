@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pw_validator/Utilities/Validator.dart';
 
@@ -11,6 +12,24 @@ Widget appBarMain(BuildContext context) {
 //modularization in programing
 
 
+Future<Widget> buildUploadStatus(UploadTask task) async {
+  return StreamBuilder<TaskSnapshot>(
+  stream: task.snapshotEvents,
+  builder: (context, snapshot) {
+    if (snapshot.hasData) {
+      final snap = snapshot.data!;
+      final progress = snap.bytesTransferred * 100 / snap.totalBytes;
+
+      return Text(
+        '$progress %',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      );
+    } else {
+      return Container();
+    }
+  },
+);
+}
 
 
 InputDecoration textFieldInputDecoration(String hintText) {
@@ -50,6 +69,27 @@ TextStyle mediumTextStyle() {
     color: Colors.white,
     fontSize: 17,
   );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   Container customButton(BuildContext context, buttonText, Color buttonColor) {
     alignment:
