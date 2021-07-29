@@ -1,49 +1,31 @@
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/signin.dart';
+import 'package:flutter_app/Screens/subbrowse.dart';
 import 'package:flutter_app/services/auth.dart';
 import 'package:flutter_app/services/firebase_storage_methods.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_app/widget/widget.dart';
 
-class SubBrowse extends StatefulWidget {
-  const SubBrowse({Key? key}) : super(key: key);
+class Test1 extends StatefulWidget {
+  const Test1({Key? key}) : super(key: key);
 
   @override
-  _SubBrowseState createState() => _SubBrowseState();
+  _Test1State createState() => _Test1State();
 }
 
-class _SubBrowseState extends State<SubBrowse> {
+class _Test1State extends State<Test1> {
   late Future<List<FirebaseFile>> futureFiles;
-  int _currentIndex = 0;
-  AuthMethods authMethods = new AuthMethods();
 
   @override
   void initState() {
     futureFiles = FirebaseStorageMethods.listAll('Images/');
-
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(40),
-          child: AppBar(
-            title: Text("Home"),
-            centerTitle: true,
-            actions: [
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 35),
-                  child: IconButton(icon: Icon(Icons.logout), onPressed: () {
-                    authMethods.signOut();
+  Widget build(BuildContext context) =>
+      Scaffold(
+        appBar: AppBar(title: Text("Home"), centerTitle: true,),
 
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => SignIn()));
-
-                  }))
-            ],
-          ),
-        ),
         body: FutureBuilder<List<FirebaseFile>>(
           future: futureFiles,
           builder: (context, snapshot) {
@@ -59,16 +41,15 @@ class _SubBrowseState extends State<SubBrowse> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // buildHeader(files.length),
+                      buildHeader(files.length),
                       const SizedBox(height: 12),
                       Expanded(
-                        child: StaggeredGridView.countBuilder(
-                          staggeredTileBuilder: (index) => index % 7 == 0
-                              ? StaggeredTile.count(2, 2)
-                              : StaggeredTile.count(1, 1),
-                          mainAxisSpacing: 8,
-                          crossAxisSpacing: 4,
-                          crossAxisCount: 3,
+                        child: GridView.builder(
+                          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 200,
+                              childAspectRatio: 3 / 2,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20),
                           itemCount: files.length,
                           itemBuilder: (context, index) {
                             final file = files[index];
@@ -84,7 +65,9 @@ class _SubBrowseState extends State<SubBrowse> {
         ),
       );
 
-  Widget buildCard(BuildContext context, FirebaseFile file) => Card(
+
+  Widget buildCard(BuildContext context, FirebaseFile file) =>
+      Card(
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Container(
@@ -100,18 +83,20 @@ class _SubBrowseState extends State<SubBrowse> {
             )),
       );
 
-  Widget buildHeader(int length) => ListTile(
+
+  Widget buildHeader(int length) =>
+      ListTile(
         tileColor: Colors.blue,
         leading: Container(
           width: 52,
           height: 52,
           child: Icon(
-            Icons.home,
+            Icons.file_copy,
             color: Colors.white,
           ),
         ),
         title: Text(
-          'Demo',
+          '$length Files',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,

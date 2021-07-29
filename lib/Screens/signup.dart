@@ -65,11 +65,7 @@ class _SignUpState extends State<SignUp> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.account_circle_outlined,
-                    color: Colors.white70,
-                    size: 120,
-                  ),
+                  Icon(Icons.account_circle_outlined, color: Colors.white70, size: 120,),
                   SizedBox(
                     height: 20,
                   ),
@@ -85,13 +81,13 @@ class _SignUpState extends State<SignUp> {
                           style: simpleTextStyle(),
                         ),
                         TextFormField(
-                       //    validator: (val) => RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$').hasMatch(val!) ? null : "Please provide a valid email",
+                          validator: (val) => RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$').hasMatch(val!) ? null : "Please provide a valid email",
                           controller: emailTextEditingController,
                           decoration: textFieldInputDecoration("Email"),
                           style: simpleTextStyle(),
                         ),
                         TextFormField(
-                        //  validator: (val) => val!.length > 6 && val.contains(RegExp(r'[A-Z]')) && val.contains(RegExp(r'[a-z]')) && val.contains(RegExp(r'[0-9]')) && val.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))? null : "Please provide a valid password ex:@Least8Letters",
+                         validator: (val) => val!.length > 6 && val.contains(RegExp(r'[A-Z]')) && val.contains(RegExp(r'[a-z]')) && val.contains(RegExp(r'[0-9]')) && val.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))? null : "Please provide a valid password ex:@Least8Letters",
                           obscureText: true,
                           controller: passwordTextEditingController,
                           decoration: textFieldInputDecoration("Password"),
@@ -99,7 +95,7 @@ class _SignUpState extends State<SignUp> {
                         ),
                         TextFormField(
                           controller: confirmPasswordTextEditingController,
-                         // validator: (val) => val!.isEmpty || val != passwordTextEditingController.text ? "password does not match" : null,
+                          validator: (val) => val!.isEmpty || val != passwordTextEditingController.text ? "password does not match" : null,
                           obscureText: true,
                           decoration:
                               textFieldInputDecoration("Confirm password"),

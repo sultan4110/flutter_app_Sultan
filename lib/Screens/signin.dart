@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/rest_password.dart';
 import 'package:flutter_app/Screens/signup.dart';
+import 'package:flutter_app/helper/home_page_controller.dart';
 import 'package:flutter_app/services/auth.dart';
 import 'package:flutter_app/services/database.dart';
 import 'package:flutter_app/widget/widget.dart';
@@ -31,7 +32,7 @@ class _SignInState extends State<SignIn> {
       await authMethods.signInWithEmailAndPassword(emailTextEditingController.text, passwordTextEditingController.text)
           .then((result) async {
         if (result != null && user!.emailVerified) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePageController()));
         }
         else authMethods.signOut();
       /*  else   Todo:email verification handler/UI
@@ -52,7 +53,7 @@ class _SignInState extends State<SignIn> {
 
       await authMethods.signInWithFacebook().then((result) async {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Home()));
+            context, MaterialPageRoute(builder: (context) => HomePageController()));
       });
     }
   }
@@ -64,7 +65,7 @@ class _SignInState extends State<SignIn> {
       await authMethods.signInWithGoogle().then((result) async {
         if (result != null) {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Home()));
+              context, MaterialPageRoute(builder: (context) => HomePageController()));
         }
       });
     }

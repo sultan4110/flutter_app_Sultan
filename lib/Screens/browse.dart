@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Screens/signin.dart';
-import 'package:flutter_app/Screens/upload.dart';
+import 'package:flutter_app/Screens/subbrowse.dart';
+import 'package:flutter_app/Screens/test1.dart';
 import 'package:flutter_app/services/auth.dart';
 import 'package:flutter_app/services/firebase_storage_methods.dart';
 import 'package:flutter_app/widget/widget.dart';
+
+import '../test.dart';
 
 class Browse extends StatefulWidget {
   const Browse({Key? key}) : super(key: key);
@@ -13,32 +16,20 @@ class Browse extends StatefulWidget {
 }
 
 class _BrowseState extends State<Browse> {
-  late Future <List<FirebaseFile>> futureFiles;
+  late Future<List<FirebaseFile>> futureFiles;
 
 
-
-  AuthMethods authMethods = new AuthMethods();
-
-@override
+  @override
   void initState() {
-
- futureFiles = FirebaseStorageMethods.listAll('files/');
-
-
-
-  super.initState();
+    futureFiles = FirebaseStorageMethods.listAll('Images/');
+    super.initState();
   }
-
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(preferredSize: const Size.fromHeight(40),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(40),
           child: appBarMain(context),
         ),
         body: Container(
@@ -67,9 +58,10 @@ class _BrowseState extends State<Browse> {
                 height: 100,
               ), // can do it in another way
 
-
               GestureDetector(
                 onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SubBrowse()));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -90,12 +82,11 @@ class _BrowseState extends State<Browse> {
                 ),
               ),
               SizedBox(
-                height: 30,),
+                height: 30,
+              ),
 
               GestureDetector(
-                onTap: () {
-
-                },
+                onTap: () {},
                 child: Container(
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width,
@@ -115,14 +106,13 @@ class _BrowseState extends State<Browse> {
                 ),
               ),
               SizedBox(
-                height: 30,)
-              ,
+                height: 30,
+              ),
               GestureDetector(
                 onTap: () {
-                  authMethods.signOut();
 
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => SignIn()));
+                      MaterialPageRoute(builder: (context) => Test1()));
                 },
                 child: Container(
                   alignment: Alignment.center,

@@ -18,8 +18,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(40),
+        appBar:
+        PreferredSize(preferredSize: const Size.fromHeight(40),
           child: appBarMain(context),
         ),
         body: Container(

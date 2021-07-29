@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Screens/signin.dart';
+import 'package:flutter_app/services/auth.dart';
 import 'package:flutter_app/services/firebase_storage_methods.dart';
 import 'package:flutter_app/widget/widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -18,12 +20,15 @@ class Upload extends StatefulWidget {
 }
 
 class _UploadState extends State<Upload> {
+  AuthMethods authMethods = new AuthMethods();
   File? file;
-  String? uploadFileType, uploadFileDirectory;
+  String? uploadFileDirectory;
+  FileType? uploadFileType;
   FilePickerResult? result;
   static UploadTask? task;
-  Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+  Future selectFile(uploadFileType) async {
+    final result = await FilePicker.platform
+        .pickFiles(allowMultiple: false, type: uploadFileType);
 
     if (result == null) return;
     final path = result.files.single.path!;
@@ -32,11 +37,16 @@ class _UploadState extends State<Upload> {
   }
 
   Future uploadFile(fileName) async {
-
     final fileType = extension(file!.path);
-    if (uploadFileDirectory != null && fileType == uploadFileType) {
-      task = FirebaseStorageMethods.uploadFile("$uploadFileDirectory $fileName", file!);
-      Fluttertoast.showToast(msg: "upload successful ", gravity: ToastGravity.CENTER, timeInSecForIosWeb: 3,
+
+    if (uploadFileDirectory != null && uploadFileType != null) {
+      task = FirebaseStorageMethods.uploadFile(
+          "$uploadFileDirectory $fileName", file!);
+      setState(() {});
+      Fluttertoast.showToast(
+        msg: "upload successful ",
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 3,
       );
     } else if (uploadFileDirectory != null && fileType != uploadFileType!) {
       Fluttertoast.showToast(
@@ -47,6 +57,8 @@ class _UploadState extends State<Upload> {
     } else {
       task = FirebaseStorageMethods.uploadFile(
           "$uploadFileDirectory $fileName", file!);
+      setState(() {});
+
       Fluttertoast.showToast(
         msg: "Select file type and file category",
         gravity: ToastGravity.CENTER,
@@ -55,24 +67,37 @@ class _UploadState extends State<Upload> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final String fileName =
         file != null ? basename(file!.path) : "No File Selected";
-    //  final fileType = extension(file!.path);
 
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(40),
-          child: appBarMain(context),
+          child: AppBar(
+            title: Text("Home"),
+            centerTitle: true,
+            actions: [
+              Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 35),
+                  child: IconButton(
+                      icon: Icon(Icons.logout),
+                      onPressed: () {
+                        authMethods.signOut();
+
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => SignIn()));
+                      }))
+            ],
+          ),
         ),
-        body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0),
           child: Column(
             children: [
               SizedBox(
-                height: 50,
+                height: 70,
               ),
 
               Icon(
@@ -90,88 +115,138 @@ class _UploadState extends State<Upload> {
                 height: 50,
               ), // can do it in another way
 
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15)),
-                child: DropdownButton<String>(
-                  hint: Text(
-                    "Select File Type",
-                    textAlign: TextAlign.center,
-                  ),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 36,
-                  isExpanded: true,
-                  elevation: 24,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                  underline: SizedBox(),
-                  value: uploadFileType,
-                  items: [
-                    DropdownMenuItem(child: Text(".png"), value: ".jpg",),
-                    DropdownMenuItem(child: Text(".mp4"), value: ".mp4",),
-                    DropdownMenuItem(child: Text(".mp3"), value: ".mp3"),
-                    DropdownMenuItem(child: Text(".pdf"), value: ".pdf")
+              Padding(
+                padding: const EdgeInsets.only(right: 13.0, left: 38),
+                child: Row(
+                  children: [
+                    Text(
+                      " File Type:  ",
+                      style: TextStyle(color: Colors.white70, fontSize: 20),
+                    ),
+                    Flexible(
+                      child: Container(
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.only(
+                          left: 35,
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: DropdownButton<FileType>(
+                          hint: Text(
+                            "          -",
+                            style: TextStyle(fontSize: 30, color: Colors.black),
+                          ),
+                          icon: const Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.black,
+                          ),
+                          iconSize: 36,
+                          isExpanded: true,
+                          elevation: 24,
+                          dropdownColor: Colors.white,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                          ),
+                          underline: SizedBox(),
+                          value: uploadFileType,
+                          items: [
+                            DropdownMenuItem(
+                              child: Center(
+                                  child: Text(
+                                "Image",
+                              )),
+                              value: FileType.image,
+                            ),
+                            DropdownMenuItem(
+                              child: Center(child: Text("Video")),
+                              value: FileType.video,
+                            ),
+                            DropdownMenuItem(
+                                child: Center(child: Text("Audio")),
+                                value: FileType.audio),
+                            DropdownMenuItem(
+                                child: Center(child: Text("Any")),
+                                value: FileType.any)
+                          ],
+                          onChanged: (newValue) {
+                            setState(() {
+                              uploadFileType = newValue!;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
                   ],
-                  onChanged: (newValue) {
-                    setState(() {
-                      uploadFileType = newValue!;
-                    });
-                  },
                 ),
               ),
 
               SizedBox(
                 height: 5,
               ),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15)),
-                child: DropdownButton<String>(
-                  hint: Text(
-                    "Select File Category",
-                    textAlign: TextAlign.center,
+
+              Row(
+                children: [
+                  Text(
+                    "   File Destination:  ",
+                    style: TextStyle(color: Colors.white70, fontSize: 20),
                   ),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  iconSize: 36,
-                  isExpanded: true,
-                  elevation: 24,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                  underline: SizedBox(),
-                  value: uploadFileDirectory,
-                  items: [
-                    DropdownMenuItem(
-                      child: Text("Images"),
-                      value: 'Images/',
-                    ), //Todo fix value
-                    DropdownMenuItem(
-                      child: Text("Video"),
-                      value: 'Video/',
+                  Flexible(
+                    child: Container(
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.only(left: 5, right: 15),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: DropdownButton<String>(
+                        hint: Text(
+                          "          -",
+                          style: TextStyle(fontSize: 30, color: Colors.black),
+                        ),
+                        icon: const Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.black,
+                        ),
+                        iconSize: 36,
+                        isExpanded: true,
+                        elevation: 24,
+                        dropdownColor: Colors.white,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                        ),
+                        underline: SizedBox(),
+                        value: uploadFileDirectory,
+                        items: [
+                          DropdownMenuItem(
+                            child: Center(child: Text("Images")),
+                            value: 'Images/',
+                          ), //Todo fix value
+                          DropdownMenuItem(
+                            child: Center(child: Text("Video")),
+                            value: 'Video/',
+                          ),
+                          DropdownMenuItem(
+                              child: Center(child: Text("Audio")),
+                              value: 'Audio/'),
+                          DropdownMenuItem(
+                              child: Center(child: Text("Documents")),
+                              value: 'Documents/')
+                        ],
+                        onChanged: (newValue) {
+                          setState(() {
+                            uploadFileDirectory = newValue!;
+                          });
+                        },
+                      ),
                     ),
-                    DropdownMenuItem(child: Text("Audio"), value: 'Audio/'),
-                    DropdownMenuItem(
-                        child: Text("Documents"), value: 'Documents/')
-                  ],
-                  onChanged: (newValue) {
-                    setState(() {
-                      uploadFileDirectory = newValue!;
-                    });
-                  },
-                ),
+                  ),
+                ],
               ),
 
               SizedBox(
-                height: 15,
+                height: 20,
               ),
 
               Center(
@@ -185,6 +260,9 @@ class _UploadState extends State<Upload> {
               ),
 
 
+              SizedBox(
+                height: 30,
+              ),
               task != null ? buildUploadStatus(task!) : Container(),
 
               SizedBox(
@@ -193,7 +271,15 @@ class _UploadState extends State<Upload> {
 
               GestureDetector(
                 onTap: () {
-                  selectFile();
+                  if (uploadFileType != null)
+                    selectFile(uploadFileType);
+                  else {
+                    Fluttertoast.showToast(
+                      msg: "Select a File Type",
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 3,
+                    );
+                  }
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -215,7 +301,7 @@ class _UploadState extends State<Upload> {
               ),
 
               SizedBox(
-                height: 10,
+                height: 15,
               ),
 
               GestureDetector(
@@ -248,39 +334,11 @@ class _UploadState extends State<Upload> {
                   ),
                 ),
               ),
-
-              SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (context) => Home()));
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  // Fix size latter...
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30)),
-
-                  child: Text(
-                    "Back",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 17,
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         ));
   }
 }
-
 
 Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
   stream: task.snapshotEvents,
@@ -292,10 +350,14 @@ Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
 
       return Text(
         '$percentage %',
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold , color: Colors.white70),
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       );
     } else {
       return Container();
     }
   },
 );
+
+
+
+

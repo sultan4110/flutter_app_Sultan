@@ -1,9 +1,11 @@
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pw_validator/Utilities/Validator.dart';
 
 Widget appBarMain(BuildContext context) {
-  return AppBar(title: Container()
+  return AppBar(
       //Image.asset("assets/imagess/logo.png", height: 50) //logo image...
 
       );
@@ -30,6 +32,8 @@ Future<Widget> buildUploadStatus(UploadTask task) async {
   },
 );
 }
+
+
 
 
 InputDecoration textFieldInputDecoration(String hintText) {
@@ -91,7 +95,7 @@ TextStyle mediumTextStyle() {
 
 
 
-  Container customButton(BuildContext context, buttonText, Color buttonColor) {
+   Container customButton(BuildContext context, buttonText, Color buttonColor) {
     alignment:
     Alignment.center;
     width:

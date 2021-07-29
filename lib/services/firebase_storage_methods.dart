@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,38 +21,49 @@ class FirebaseStorageMethods {
       );
     }
   }
+  static UploadTask? uploadBytes(String destination, Uint8List data) {
+    try {
+      final ref = FirebaseStorage.instance.ref(destination);
 
-  static Future<List<String>> _getDownloadLinks(List<Reference> refs) =>
-      Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
+      return ref.putData(data);
+    } on FirebaseException catch (e) {
+      return null;
+    }
+  }
+
+
+
+
+
+  //----------------------------------------------------------------------------------------------------------------------------
+  static Future<List<String>> _getDownloadLinks(List<Reference> refs) async {
+    return Future.wait(refs.map((ref) async {return ref.getDownloadURL();}).toList());
+  }
+
+  //----------------------------------------------------------------------------------------------------------------------------
 
   static Future<List<FirebaseFile>> listAll(String path) async {
     final ref = FirebaseStorage.instance.ref(path);
     final result = await ref.listAll();
 
-
     final urls = await _getDownloadLinks(result.items);
 
     return urls.asMap().map((index, url) {
-      final ref = result.items[index];
-      final name = ref.name;
-      final file = FirebaseFile(ref: ref, name: name, url: url);
-
-      return MapEntry(index, file);
-    })
-        .values
-        .toList();
+          final ref = result.items[index];
+          final name = ref.name;
+          final file = FirebaseFile(ref: ref, name: name, url: url);
+          return MapEntry(index, file);}).values.toList();
   }
-
+//----------------------------------------------------------------------------------------------------------------------------
 }
 
+
+
 class FirebaseFile {
+  //TODO: add file type
   final Reference ref;
   final String name;
   final String url;
-
-  const FirebaseFile({
-    required this.ref,
-    required this.name,
-    required this.url,
-  });
+  //final String fileType;
+  const FirebaseFile({required this.ref, required this.name, required this.url});
 }
