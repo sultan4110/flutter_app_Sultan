@@ -21,7 +21,8 @@ class FirebaseStorageMethods {
       );
     }
   }
-  static UploadTask? uploadBytes(String destination, Uint8List data) {
+
+  /*static UploadTask? uploadBytes(String destination, Uint8List data) {
     try {
       final ref = FirebaseStorage.instance.ref(destination);
 
@@ -29,7 +30,7 @@ class FirebaseStorageMethods {
     } on FirebaseException catch (e) {
       return null;
     }
-  }
+  }*/
 
 
 

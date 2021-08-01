@@ -1,10 +1,10 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/Screens/signin.dart';
 import 'package:flutter_app/services/auth.dart';
 import 'package:flutter_app/services/firebase_storage_methods.dart';
@@ -13,11 +13,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'home.dart';
 import 'package:path/path.dart';
 
+
 class Upload extends StatefulWidget {
   const Upload({Key? key}) : super(key: key);
   @override
   _UploadState createState() => _UploadState();
 }
+
 
 class _UploadState extends State<Upload> {
   AuthMethods authMethods = new AuthMethods();
@@ -43,11 +45,7 @@ class _UploadState extends State<Upload> {
       task = FirebaseStorageMethods.uploadFile(
           "$uploadFileDirectory $fileName", file!);
       setState(() {});
-      Fluttertoast.showToast(
-        msg: "upload successful ",
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 3,
-      );
+
     } else if (uploadFileDirectory != null && fileType != uploadFileType!) {
       Fluttertoast.showToast(
         msg: "File type Does Not Match",
@@ -73,10 +71,10 @@ class _UploadState extends State<Upload> {
         file != null ? basename(file!.path) : "No File Selected";
 
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(40),
+        appBar: PreferredSize(preferredSize: const Size.fromHeight(40),
+
           child: AppBar(
-            title: Text("Home"),
+            title: Text("Upload"),
             centerTitle: true,
             actions: [
               Padding(
@@ -97,7 +95,7 @@ class _UploadState extends State<Upload> {
           child: Column(
             children: [
               SizedBox(
-                height: 70,
+                height: 50,
               ),
 
               Icon(
@@ -266,7 +264,7 @@ class _UploadState extends State<Upload> {
               task != null ? buildUploadStatus(task!) : Container(),
 
               SizedBox(
-                height: 150,
+                height: 100,
               ),
 
               GestureDetector(
@@ -346,18 +344,37 @@ Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
     if (snapshot.hasData) {
       final snap = snapshot.data!;
       final progress = snap.bytesTransferred / snap.totalBytes;
-      final percentage = (progress * 100).toStringAsFixed(2);
+      final percentage = (progress * 100).toStringAsFixed(0);
 
-      return Text(
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(30),
+        child: Stack(
+          children: <Widget>[
+            Container(
+              height: 20,
+              child: LinearProgressIndicator(value: progress,),
+              
+            ),
+            Center(child: Text("$percentage%"),),
+          ],
+        ),
+      );
+
+
+
+ /*
+        LinearProgressIndicator(
+        value: progress,
+        semanticsLabel: 'In progress',
+
+      );*/
+
+       /* Text(
         '$percentage %',
         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      );
+      );*/
     } else {
       return Container();
     }
   },
 );
-
-
-
-

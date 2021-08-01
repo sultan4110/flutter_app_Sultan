@@ -72,7 +72,7 @@ class _SubBrowseState extends State<SubBrowse> {
                           itemCount: files.length,
                           itemBuilder: (context, index) {
                             final file = files[index];
-                            return buildCard(context, file);
+                            return buildImageCard(context, file);
                           },
                         ),
                       ),
@@ -84,21 +84,36 @@ class _SubBrowseState extends State<SubBrowse> {
         ),
       );
 
-  Widget buildCard(BuildContext context, FirebaseFile file) => Card(
+  Widget buildImageCard(BuildContext context, FirebaseFile file) => Card(
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Container(
             margin: EdgeInsets.all(8),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                file.url,
-                width: 100,
-                height: 100,
-                fit: BoxFit.cover,
-              ),
-            )),
-      );
+              child: Image.network(file.url, width: 100, height: 100, fit: BoxFit.cover,),)),);
+
+
+
+  Widget buildVideoCard(BuildContext context, FirebaseFile file) => Card(
+    margin: EdgeInsets.zero,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    child: Container(
+        margin: EdgeInsets.all(8),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child:
+
+          Image.network(file.url, width: 100, height: 100, fit: BoxFit.cover,),)),);
+
+
+
+
+
+
+
+
+
 
   Widget buildHeader(int length) => ListTile(
         tileColor: Colors.blue,
